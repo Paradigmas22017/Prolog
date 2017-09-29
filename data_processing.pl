@@ -1,0 +1,1 @@
+/* Arquivo destinado ao processamento de dados realizado pelo prolog. */
