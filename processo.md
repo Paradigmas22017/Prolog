@@ -9,7 +9,9 @@ Precisamos utilizar algumas técnicas de pré-processamento de dados. Iremos faz
 
 Essas duas partes serão feitas em python, por conta da velocidade de processamento. Prolog demora muito. Para ter um exemplo de como fazer isso, basta acessar o [link](https://github.com/Segmentation-Fault-Machine-Learning/Emails-Problem/tree/Pre-processing).
 
-**3.**  Após o csv com todos os emails criado, precisamos refinar esses dados, ou seja, utilizar algumas técnicas de processamento de dados textuais. Nessa parte o prolog é muito foda, basicamente precisamos remover palavras conectivas, que não servem para o entendimento do contexto. O nome dessa técnica é Stop-Words. Precisamos utilizar esse tratamento no csv. 
+**3.**  Após o csv com todos os emails criado, precisamos refinar esses dados, ou seja, utilizar algumas técnicas de processamento de dados textuais. Nessa parte o prolog é muito foda, basicamente precisamos remover palavras conectivas, que não servem para o entendimento do contexto. O nome dessa técnica é Stop-Words. Precisamos utilizar esse tratamento no csv existe também muitas técnicas para esse refinamento, vocês podem saber mais nesse [link](https://github.com/Segmentation-Fault-Machine-Learning/Knowledge/wiki/Processamento-dos-Dados).
+
+Todas essas técnicas possuem suporte para aplicação no prolog.
 
 # Criação do modelo
 
