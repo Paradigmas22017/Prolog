@@ -18,7 +18,7 @@ Todas essas técnicas possuem suporte para aplicação no prolog.
 O modelo consiste em uma diversidade de dados colhidos para fazer a relação entre o conteúdo dos emails e o seu assunto. Existem diversas técnicas que podemos usar... As principais são Bag of Words (N grams), isso é bem tranquilo de fazer com prolog, basicamente você precisa criar uma matriz com as palavras mais encontradas dependendo do assunto (TDF-IF). Para saber mais sobre isso acesse o [link](https://github.com/Segmentation-Fault-Machine-Learning/Knowledge/wiki/Processamento-dos-Dados)
 
 
-Após a aplicação desses algoritmos, precisamos quantificar esses dados em números, para fazer operações com esses dados e essas matrizes, dessa forma será possível aplicar alguns algoritmos de aprendizado. Existem os seguintes algoritmos [link](https://github.com/Segmentation-Fault-Machine-Learning/Knowledge/wiki/An%C3%A1lise-dos-algoritmos)
+Após a aplicação desses algoritmos, precisamos quantificar essas matrizes para fazer operações com esses dados e essas matrizes, dessa forma será possível aplicar alguns algoritmos de aprendizado. Existem os seguintes algoritmos [link](https://github.com/Segmentation-Fault-Machine-Learning/Knowledge/wiki/An%C3%A1lise-dos-algoritmos)
 
 
 Temos um exemplo de tudo isso implementado em python, ou seja, o maior desafio seria traduzir o que está sendo feito em python para prolog.
