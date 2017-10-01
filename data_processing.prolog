@@ -2,21 +2,19 @@
 set_facts:-
   consult('stop_words_facts_database.prolog').
 
-
 read_data:-
   csv_read_file('sample_data.csv', Data),
   nth1(2,Data,SecondRow),
   row(X,_) = SecondRow,
   row(_,Y) = SecondRow,
-  atomic_list_concat(L, ' ', X),
-  atomic_list_concat(L2, ' ', Y),
-  write(L),
-  process_array_of_words(L).
-
+  atomic_list_concat(TextList,' ',X),
+  atomic_list_concat(LabelList,' ',Y),
+  writeln(TextList),
+  process_array_of_words(TextList).
 
 %Regra para fazer a remoção de um elemento dentro de um array.
 remove_stop_words([],[]).
-remove_stop_words([Head|Tail],Result):- it_is_stop_word(Head), remove_stop_words(Tail,Result).
+remove_stop_words([Head|Tail],Result):- text_to_string(Head, String), it_is_stop_word(String), remove_stop_words(Tail,Result).
 remove_stop_words([Head|Tail],[Head|Result]):- remove_stop_words(Tail,Result).
 
 %Regra para verificar se a palavra é stop-word.
@@ -26,8 +24,8 @@ it_is_stop_word(Word):-stopWord(Word).
 if_then_else(X,Y,_):-X,!,Y.
 if_then_else(_,_,Z):-Z.
 
-
 process_array_of_words(DataTest):-
+
   %open('array_of_words.txt', read, Str),
   %read_file(Str,Lines),
   %close(Str),
@@ -40,7 +38,6 @@ process_array_of_words(DataTest):-
 main:-
   set_facts,
   read_data.
-
 
 /*
 read_file(Stream, []):-
