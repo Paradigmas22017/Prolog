@@ -14,11 +14,19 @@ read_data:-
 
 %Regra para fazer a remoção de um elemento dentro de um array.
 remove_stop_words([],[]).
-remove_stop_words([Head|Tail],Result):- text_to_string(Head, String), it_is_stop_word(String), remove_stop_words(Tail,Result).
+remove_stop_words([Head|Tail],Result):- it_is_stop_word(Head), remove_stop_words(Tail,Result).
 remove_stop_words([Head|Tail],[Head|Result]):- remove_stop_words(Tail,Result).
+
+%Regra para remover os elementos com sufixos iguais aos stemming
+remove_stemming([],[]).
+remove_stemming([Head|Tail],Result):- it_is_stemming(Head), remove_stemming(Tail,Result).
+remove_stemming([Head|Tail],[Head|Result]):- remove_stemming(Tail,Result).
 
 %Regra para verificar se a palavra é stop-word.
 it_is_stop_word(Word):-stopWord(Word).
+
+%Regra para verificar se a palavra é stemming.
+it_is_stemming(Word):-suffix(Word).
 
 %Simulação do if then else em prolog.
 if_then_else(X,Y,_):-X,!,Y.
