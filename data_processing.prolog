@@ -1,6 +1,7 @@
 % Definindo os fatos que serão utilizados no algoritmo.
 set_facts:-
-  consult('stop_words_facts_database.prolog').
+  consult('stop_words_facts_database.prolog'),
+  consult('stemming_facts_database.prolog').
 
 read_data:-
   csv_read_file('sample_data.csv', Data),
