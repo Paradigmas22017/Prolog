@@ -1,3 +1,5 @@
+use_module(library(csv)).
+
 % Definindo os fatos que serão utilizados no algoritmo.
 set_facts:-
   consult('stop_words_facts_database.prolog'),
@@ -10,15 +12,18 @@ read_data:-
   row(_,Y) = SecondRow,
   atomic_list_concat(TextList,' ',X),
   atomic_list_concat(LabelList,' ',Y),
-  writeln(TextList),
   process_array_of_words(TextList, TextListWithoutStepWords),
-  writeln(TextListWithoutStepWords),
   remove_stemming_five(TextListWithoutStepWords, TextListWithoutStemmingFive),
   remove_stemming_four(TextListWithoutStemmingFive, TextListWithoutStemmingFour),
   remove_stemming_three(TextListWithoutStemmingFour, TextListWithoutStemmingThree),
   remove_stemming_two(TextListWithoutStemmingThree, TextListWithoutStemmingTwo),
   remove_stemming_one(TextListWithoutStemmingTwo, TextListWithoutStemmingOne),
-  writeln(TextListWithoutStemmingOne).
+  atomic_list_concat(TextListWithoutStemmingOne, ' ', DataToCsv),
+  atomic_list_concat(LabelList, ' ', LabelToCsv),
+  List = [DataToCsv],
+  Label = [LabelToCsv],
+  findall(row(A,B), (member(A, List), member(B, Label)), Row),
+  csv_write_file('output.csv', Row).
 
 %Regra para fazer a remoção de um elemento dentro de um array.
 remove_stop_words([],[]).
@@ -33,7 +38,6 @@ remove_stemming_one([Head|Tail],Result):-
   (it_is_stemming_one(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
   sub_atom(Head, 0, LengthTo, _After, Prefix),
-  writeln(Prefix),
   remove_stemming_one([Prefix|Tail], Result)),
   it_is_stemming_one(Head, SizeSuffix)).
 remove_stemming_one([Head|Tail],[Head|Result]):-
@@ -46,7 +50,6 @@ remove_stemming_two([Head|Tail],Result):-
   (it_is_stemming_two(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
   sub_atom(Head, 0, LengthTo, _After, Prefix),
-  writeln(Prefix),
   remove_stemming_two([Prefix|Tail], Result)),
   it_is_stemming_two(Head, SizeSuffix)).
 remove_stemming_two([Head|Tail],[Head|Result]):-
@@ -59,7 +62,6 @@ remove_stemming_three([Head|Tail],Result):-
   (it_is_stemming_three(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
   sub_atom(Head, 0, LengthTo, _After, Prefix),
-  writeln(Prefix),
   remove_stemming_three([Prefix|Tail], Result)),
   it_is_stemming_three(Head, SizeSuffix)).
 remove_stemming_three([Head|Tail],[Head|Result]):-
@@ -72,7 +74,6 @@ remove_stemming_four([Head|Tail],Result):-
   (it_is_stemming_four(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
   sub_atom(Head, 0, LengthTo, _After, Prefix),
-  writeln(Prefix),
   remove_stemming_four([Prefix|Tail], Result)),
   it_is_stemming_four(Head, SizeSuffix)).
 remove_stemming_four([Head|Tail],[Head|Result]):-
@@ -85,7 +86,6 @@ remove_stemming_five([Head|Tail],Result):-
   (it_is_stemming_five(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
   sub_atom(Head, 0, LengthTo, _After, Prefix),
-  writeln(Prefix),
   remove_stemming_five([Prefix|Tail], Result)),
   it_is_stemming_five(Head, SizeSuffix)).
 remove_stemming_five([Head|Tail],[Head|Result]):-
