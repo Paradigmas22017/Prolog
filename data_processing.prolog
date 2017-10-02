@@ -13,8 +13,12 @@ read_data:-
   writeln(TextList),
   process_array_of_words(TextList, TextListWithoutStepWords),
   writeln(TextListWithoutStepWords),
-  remove_stemming(TextListWithoutStepWords, TextListWithoutStemming),
-  writeln(TextListWithoutStemming).
+  remove_stemming_five(TextListWithoutStepWords, TextListWithoutStemmingFive),
+  remove_stemming_four(TextListWithoutStemmingFive, TextListWithoutStemmingFour),
+  remove_stemming_three(TextListWithoutStemmingFour, TextListWithoutStemmingThree),
+  remove_stemming_two(TextListWithoutStemmingThree, TextListWithoutStemmingTwo),
+  remove_stemming_one(TextListWithoutStemmingTwo, TextListWithoutStemmingOne),
+  writeln(TextListWithoutStemmingOne).
 
 %Regra para fazer a remoção de um elemento dentro de um array.
 remove_stop_words([],[]).
@@ -22,24 +26,73 @@ remove_stop_words([Head|Tail],Result):- it_is_stop_word(Head), remove_stop_words
 remove_stop_words([Head|Tail],[Head|Result]):- remove_stop_words(Tail,Result).
 
 %Regra para remover os elementos com sufixos iguais aos stemming
-remove_stemming([],[]).
-remove_stemming([Head|Tail],Result):- it_is_stemming_one(Head, SizeSuffix),
+remove_stemming_one([],[]).
+remove_stemming_one([Head|Tail],Result):-
   atom_length(Head, Length),
+  if_then_else(Length > 1,
+  (it_is_stemming_one(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
   sub_atom(Head, 0, LengthTo, _After, Prefix),
-  %Salvar a Head e Prefix em um arquivo para troca-los depois.
   writeln(Prefix),
-  remove_stemming(Tail, Result).
-remove_stemming([Head|Tail],[Head|Result]):-
-  remove_stemming(Tail,Result).
+  remove_stemming_one([Prefix|Tail], Result)),
+  it_is_stemming_one(Head, SizeSuffix)).
+remove_stemming_one([Head|Tail],[Head|Result]):-
+  remove_stemming_one(Tail,Result).
+
+remove_stemming_two([],[]).
+remove_stemming_two([Head|Tail],Result):-
+  atom_length(Head, Length),
+  if_then_else(Length > 2,
+  (it_is_stemming_two(Head, SizeSuffix),
+  LengthTo is Length - SizeSuffix,
+  sub_atom(Head, 0, LengthTo, _After, Prefix),
+  writeln(Prefix),
+  remove_stemming_two([Prefix|Tail], Result)),
+  it_is_stemming_two(Head, SizeSuffix)).
+remove_stemming_two([Head|Tail],[Head|Result]):-
+  remove_stemming_two(Tail,Result).
+
+remove_stemming_three([],[]).
+remove_stemming_three([Head|Tail],Result):-
+  atom_length(Head, Length),
+  if_then_else(Length > 3,
+  (it_is_stemming_three(Head, SizeSuffix),
+  LengthTo is Length - SizeSuffix,
+  sub_atom(Head, 0, LengthTo, _After, Prefix),
+  writeln(Prefix),
+  remove_stemming_three([Prefix|Tail], Result)),
+  it_is_stemming_three(Head, SizeSuffix)).
+remove_stemming_three([Head|Tail],[Head|Result]):-
+  remove_stemming_three(Tail,Result).
+
+remove_stemming_four([],[]).
+remove_stemming_four([Head|Tail],Result):-
+  atom_length(Head, Length),
+  if_then_else(Length > 4,
+  (it_is_stemming_four(Head, SizeSuffix),
+  LengthTo is Length - SizeSuffix,
+  sub_atom(Head, 0, LengthTo, _After, Prefix),
+  writeln(Prefix),
+  remove_stemming_four([Prefix|Tail], Result)),
+  it_is_stemming_four(Head, SizeSuffix)).
+remove_stemming_four([Head|Tail],[Head|Result]):-
+  remove_stemming_four(Tail,Result).
+
+remove_stemming_five([],[]).
+remove_stemming_five([Head|Tail],Result):-
+  atom_length(Head, Length),
+  if_then_else(Length > 5,
+  (it_is_stemming_five(Head, SizeSuffix),
+  LengthTo is Length - SizeSuffix,
+  sub_atom(Head, 0, LengthTo, _After, Prefix),
+  writeln(Prefix),
+  remove_stemming_five([Prefix|Tail], Result)),
+  it_is_stemming_five(Head, SizeSuffix)).
+remove_stemming_five([Head|Tail],[Head|Result]):-
+  remove_stemming_five(Tail,Result).
 
 %Regra para verificar se a palavra é stop-word.
 it_is_stop_word(Word):-stopWord(Word).
-
-%Regra para trocar o elemento de uma lista
-replace(_, _, [], []).
-replace(O, R, [O|T], [R|T2]) :- replace(O, R, T, T2).
-replace(O, R, [H|T], [H|T2]) :- H \= O, replace(O, R, T, T2).
 
 %Regra para verificar se a palavra é stemming.
 it_is_stemming_one(Word, SizeSuffix):-
@@ -51,6 +104,7 @@ it_is_stemming_one(Word, SizeSuffix):-
 
 it_is_stemming_two(Word, SizeSuffix):-
   atom_length(Word, Length),
+  Length > 2,
   LengthTo is Length - 2,
   sub_atom(Word, LengthTo, _Length, 0, Suffix),
   suffix(Suffix),
@@ -58,6 +112,7 @@ it_is_stemming_two(Word, SizeSuffix):-
 
 it_is_stemming_three(Word, SizeSuffix):-
   atom_length(Word, Length),
+  Length > 3,
   LengthTo is Length - 3,
   sub_atom(Word, LengthTo, _Length, 0, Suffix),
   suffix(Suffix),
@@ -65,6 +120,7 @@ it_is_stemming_three(Word, SizeSuffix):-
 
 it_is_stemming_four(Word, SizeSuffix):-
   atom_length(Word, Length),
+  Length > 4,
   LengthTo is Length - 4,
   sub_atom(Word, LengthTo, _Length, 0, Suffix),
   suffix(Suffix),
@@ -72,6 +128,7 @@ it_is_stemming_four(Word, SizeSuffix):-
 
 it_is_stemming_five(Word, SizeSuffix):-
   atom_length(Word, Length),
+  Length > 5,
   LengthTo is Length - 5,
   sub_atom(Word, LengthTo, _Length, 0, Suffix),
   suffix(Suffix),

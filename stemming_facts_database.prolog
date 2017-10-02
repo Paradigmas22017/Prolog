@@ -34,3 +34,17 @@ suffix(ish).
 suffix(ive).
 suffix(less).
 suffix(y).
+suffix(an).
+suffix(ancy).
+suffix(ant).
+suffix(ar).
+suffix(ary).
+suffix(ed).
+suffix(ency).
+suffix(ee).
+suffix(es).
+suffix(est).
+suffix(logy).
+suffix(ing).
+suffix(ly).
+suffix(s).
