@@ -27,12 +27,19 @@ remove_stemming([Head|Tail],Result):- it_is_stemming_one(Head, SizeSuffix),
   atom_length(Head, Length),
   LengthTo is Length - SizeSuffix,
   sub_atom(Head, 0, LengthTo, _After, Prefix),
+  %Salvar a Head e Prefix em um arquivo para troca-los depois.
   writeln(Prefix),
   remove_stemming(Tail, Result).
-remove_stemming([Head|Tail],[Head|Result]):- remove_stemming(Tail,Result).
+remove_stemming([Head|Tail],[Head|Result]):-
+  remove_stemming(Tail,Result).
 
 %Regra para verificar se a palavra é stop-word.
 it_is_stop_word(Word):-stopWord(Word).
+
+%Regra para trocar o elemento de uma lista
+replace(_, _, [], []).
+replace(O, R, [O|T], [R|T2]) :- replace(O, R, T, T2).
+replace(O, R, [H|T], [H|T2]) :- H \= O, replace(O, R, T, T2).
 
 %Regra para verificar se a palavra é stemming.
 it_is_stemming_one(Word, SizeSuffix):-
