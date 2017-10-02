@@ -1,3 +1,6 @@
+% [cachorro, galinha, gato, gato, gato, galinha, cachorro, galinha, gato, cachorro, gato]
+bag_of_words(List, Result) :- transform_in_pair(List, Pair), set_all_appeared(Pair, PairCount), write(PairCount).
+
 % TRANSFORMA TODAS AS PALAVRAS EM PARES COM APPREARED 1.      ([cachorro, gato]) => [[cachorro, 1], [gato, 1]]
 transform_in_pair([Head | Tail], [[Head, Appeared] | ResultTail]) :-
     Appeared is 1,
@@ -10,8 +13,6 @@ get_item_content([Content | Appeared], Result) :- Result = Content.
 
 % SETA VALOR DE APPEARED.
 set_appeared_value(Item, Total, [Result, Total]) :- get_item_content(Item, Result).
-
-% set_appeared_value(Content, Total) :- write(Total), write(Content), Content = [Total].
 
 
 
@@ -30,19 +31,14 @@ count([DifferentContent | Tail], Looked, Total) :-
     count(Tail ,Looked, Total).
 
 
+
 % CONTA QUANTIDADE DE VEZES QUE CONTENT APARECE NA LISTA E SETA APPREARED.
 set_all_appeared([], []).
-set_all_appeared([Head | Tail], FinalList) :-
+set_all_appeared([Head | Tail], [ ResultItem | FinalTail]) :-
     get_item_content(Head, Result),
     count(Tail, Result, Total),
-    % write(Total),
     set_appeared_value(Head, Total, ResultItem),
-    % write(ResultItem),
-    append(FinalList, ResultItem),
-    set_all_appeared(Tail),
-    write(FinalList).
+    set_all_appeared(Tail, FinalTail).
 
 
-
-
-bag_of_words(List, Result) :- transform_in_pair(List, Result), write(Result).
+% remove_repeated()
