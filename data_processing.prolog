@@ -5,25 +5,54 @@ set_facts:-
   consult('stop_words_facts_database.prolog'),
   consult('stemming_facts_database.prolog').
 
-read_data:-
-  csv_read_file('sample_data.csv', Data),
-  nth1(2,Data,SecondRow),
-  row(X,_) = SecondRow,
-  row(_,Y) = SecondRow,
+read_data_loop(N, Result, Label, Path):-
+  csv_read_file(Path, Data),
+  nth0(N,Data,Row),
+  row(X,_) = Row,
+  row(_,Y) = Row,
+
   atomic_list_concat(TextList,' ',X),
   atomic_list_concat(LabelList,' ',Y),
   process_array_of_words(TextList, TextListWithoutStepWords),
+
   remove_stemming_five(TextListWithoutStepWords, TextListWithoutStemmingFive),
   remove_stemming_four(TextListWithoutStemmingFive, TextListWithoutStemmingFour),
   remove_stemming_three(TextListWithoutStemmingFour, TextListWithoutStemmingThree),
   remove_stemming_two(TextListWithoutStemmingThree, TextListWithoutStemmingTwo),
   remove_stemming_one(TextListWithoutStemmingTwo, TextListWithoutStemmingOne),
+
   atomic_list_concat(TextListWithoutStemmingOne, ' ', DataToCsv),
   atomic_list_concat(LabelList, ' ', LabelToCsv),
-  List = [DataToCsv],
+
   Label = [LabelToCsv],
-  findall(row(A,B), (member(A, List), member(B, Label)), Row),
-  csv_write_file('output.csv', Row).
+  Result = DataToCsv.
+
+read_data(Init, PathInput, PathOutput):-
+  read_data_loop(0, List0, Label, PathInput),
+  read_data_loop(1, List1, Label, PathInput),
+  read_data_loop(2, List2, Label, PathInput),
+  read_data_loop(3, List3, Label, PathInput),
+  read_data_loop(4, List4, Label, PathInput),
+  read_data_loop(5, List5, Label, PathInput),
+  read_data_loop(6, List6, Label, PathInput),
+  read_data_loop(7, List7, Label, PathInput),
+  read_data_loop(8, List8, Label, PathInput),
+  read_data_loop(9, List9, Label, PathInput),
+  read_data_loop(10, List10, Label, PathInput),
+  read_data_loop(11, List11, Label, PathInput),
+  read_data_loop(12, List12, Label, PathInput),
+  read_data_loop(13, List13, Label, PathInput),
+  read_data_loop(14, List14, Label, PathInput),
+  read_data_loop(15, List15, Label, PathInput),
+  read_data_loop(16, List16, Label, PathInput),
+  read_data_loop(17, List17, Label, PathInput),
+  read_data_loop(18, List18, Label, PathInput),
+  read_data_loop(19, List19, Label, PathInput),
+  ListFinal = [List0,List1,List2,List3,List4,List5,List6,List7,List8,List9,List10,List11,List12,List13,List14,List15,List16,List17,List18,List19],
+  writeln(ListFinal),
+  findall(row(B,A), (member(B, Label), member(A, ListFinal)), Row),
+  %findall(row(A,B), (member(A, List), member(B, Label)), Row),
+  csv_write_file(PathOutput, Row).
 
 %Regra para fazer a remoção de um elemento dentro de um array.
 remove_stop_words([],[]).
@@ -34,6 +63,7 @@ remove_stop_words([Head|Tail],[Head|Result]):- remove_stop_words(Tail,Result).
 remove_stemming_one([],[]).
 remove_stemming_one([Head|Tail],Result):-
   atom_length(Head, Length),
+  Length > 1,
   if_then_else(Length > 1,
   (it_is_stemming_one(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
@@ -46,6 +76,7 @@ remove_stemming_one([Head|Tail],[Head|Result]):-
 remove_stemming_two([],[]).
 remove_stemming_two([Head|Tail],Result):-
   atom_length(Head, Length),
+  Length > 2,
   if_then_else(Length > 2,
   (it_is_stemming_two(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
@@ -58,6 +89,7 @@ remove_stemming_two([Head|Tail],[Head|Result]):-
 remove_stemming_three([],[]).
 remove_stemming_three([Head|Tail],Result):-
   atom_length(Head, Length),
+  Length > 3,
   if_then_else(Length > 3,
   (it_is_stemming_three(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
@@ -70,6 +102,7 @@ remove_stemming_three([Head|Tail],[Head|Result]):-
 remove_stemming_four([],[]).
 remove_stemming_four([Head|Tail],Result):-
   atom_length(Head, Length),
+  Length > 4,
   if_then_else(Length > 4,
   (it_is_stemming_four(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
@@ -81,7 +114,8 @@ remove_stemming_four([Head|Tail],[Head|Result]):-
 
 remove_stemming_five([],[]).
 remove_stemming_five([Head|Tail],Result):-
-  atom_length(Head, Length),
+  atom_length(Head, Length),i
+  Length > 5,
   if_then_else(Length > 5,
   (it_is_stemming_five(Head, SizeSuffix),
   LengthTo is Length - SizeSuffix,
@@ -142,25 +176,11 @@ if_then_else(_,_,Z):-Z.
 process_array_of_words(DataTest, DataTestResult):-
   remove_stop_words(DataTest, DataTestResult).
 
-
-    %open('array_of_words.txt', read, Str),
-    %read_file(Str,Lines),
-    %close(Str),
-    %nth1(1,Lines,Data),
-    %atomic_list_concat(DataTest, ' ', Data),
-
 %main process
 main:-
   set_facts,
-  read_data.
-
-/*
-read_file(Stream, []):-
-  at_end_of_stream(Stream).
-
-read_file(Stream, [X|L]):-
-  \+ at_end_of_stream(Stream),
-  read_line_to_codes(Stream,Codes),
-  atom_chars(X, Codes),
-  read_file(Stream,L), !.
-*/
+  read_data('./Input/soc.religion.christian.csv','./Output/output1.csv'),
+  read_data('./Input/talk.religion.misc.csv','./Output/output2.csv'),
+  read_data('./Input/talk.politics.mideast.csv','./Output/output3.csv'),
+  read_data('./Input/talk.politics.guns.csv','./Output/output4.csv'),
+  read_data('./Input/talk.politics.misc.csv','./Output/output5.csv').
