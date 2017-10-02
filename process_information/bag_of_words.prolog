@@ -1,5 +1,8 @@
+:-dynamic(repreated/1).
+repeated(pneumoultramicroscopicosilico).
+
 % [cachorro, galinha, gato, gato, gato, galinha, cachorro, galinha, gato, cachorro, gato]
-bag_of_words(List, Result) :- transform_in_pair(List, Pair), set_all_appeared(Pair, PairCount), write(PairCount).
+bag_of_words(List) :- transform_in_pair(List, Pair), set_all_appeared(Pair, PairCount), process_array_of_words(PairCount).
 
 % TRANSFORMA TODAS AS PALAVRAS EM PARES COM APPREARED 1.      ([cachorro, gato]) => [[cachorro, 1], [gato, 1]]
 transform_in_pair([Head | Tail], [[Head, Appeared] | ResultTail]) :-
@@ -41,4 +44,17 @@ set_all_appeared([Head | Tail], [ ResultItem | FinalTail]) :-
     set_all_appeared(Tail, FinalTail).
 
 
-% remove_repeated()
+process_array_of_words([]).
+process_array_of_words([Head | Tail]) :-
+    write(Head), nl,
+    % is_repeated(Head),
+    process_array_of_words(Tail).
+%
+%
+% remove_repeated_words([],[]).
+% remove_repeated_words([Head|Tail],Result):- is_repeated(Head), remove_repeated_words(Tail,Result).
+% % remove_repeated_words([Head|Tail],[Head|Result]):- remove_repeated_words(Tail,Result).
+% %
+% is_repeated([Content, Number]) :-
+%     repeated(Content),
+%     assert(repeated(Content)).
